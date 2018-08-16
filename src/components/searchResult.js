@@ -1,34 +1,32 @@
-import React, {Component} from 'react';
-import {Grid, Row, Col, Image} from 'react-bootstrap';
+import React from 'react';
+import {Grid, Row, Col} from 'react-bootstrap';
 
-class searchResult extends Component{
-
-    constructor(props)
-    {
-        super(props);
-
-    }
-
-    render() {
-        const AlbumResult=this.props.storeResult.map((obj,index)=> {
-            return <Row key={index} className="show-grid">
-                        <Col xs={6} md={4}>
-                                <div>
-                                    {obj.artistName}
-                                </div>
-                        </Col>
-                        <Col xs={6} md={4}>
-                             <div>
-                                 {obj.collectionName}
-                             </div>
-                        </Col>
-                        <Col xsHidden md={4}>
-                              <div>
-                                  <img src={obj.artworkUrl60} />
-                              </div>
-                        </Col>
-                   </Row>;
-        });
+const searchResult = (props) => {
+        let AlbumResult=<div> </div>;
+        if(props.artistName !== '' && props.storeResult.length!==0) {
+             AlbumResult = props.storeResult.map((obj, index) => {
+                return <Row key={index} className="show-grid">
+                    <Col xs={6} md={4}>
+                        <div>
+                            {obj.artistName}
+                        </div>
+                    </Col>
+                    <Col xs={6} md={4}>
+                        <div>
+                            {obj.collectionName}
+                        </div>
+                    </Col>
+                    <Col xsHidden md={4}>
+                        <div>
+                            <img src={obj.artworkUrl60} alt="unavailable"/>
+                        </div>
+                    </Col>
+                </Row>;
+            });
+        }
+        else if(props.artistName === '' || props.storeResult.length===0){
+            AlbumResult =<div> </div>;
+        }
 
         return (
             <div className="searchResult">
@@ -50,7 +48,7 @@ class searchResult extends Component{
                </Grid>
             </div>
         );
-    }
-}
+
+};
 
 export default searchResult;

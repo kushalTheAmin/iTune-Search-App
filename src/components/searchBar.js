@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { throttle } from 'throttle-debounce';
 
 class searchBar extends Component {
 
@@ -7,21 +8,26 @@ class searchBar extends Component {
         this.state= {
             artistName : ''
         };
-        this.onSearch = this.onSearch.bind(this);
+        this.onInputChange = this.onInputChange.bind(this);
+        this.searchThrottled = throttle(1000, this.props.onSearch);
     }
 
-    onSearch(event) {
-        let artistName = event.target.value;
-        this.setState({
-            artistName : artistName
-        },()=> {this.props.onSearch(this.state.artistName)});
+    onInputChange(event) {
+        const artistName = event.target.value;
+        if(artistName!==null)
+        {
+            this.setState({
+                        artistName : artistName
+                    },()=>{this.searchThrottled(this.state.artistName)});
+        }
     }
+
 
     render() {
 
         return (
             <div className="searchBar">
-                <input type="text" value={this.state.artistName} onChange={this.onSearch}/>
+               <input type="text" value={this.state.artistName} onChange={this.onInputChange}/>
             </div>
         );
     }

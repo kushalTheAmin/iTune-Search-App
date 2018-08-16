@@ -18,7 +18,7 @@ class App extends Component {
 
     onSearch(artistName)
     {
-        let store =Array(0);
+        let store;
         let storeResult;
         this.setState({
             artistName: artistName
@@ -29,28 +29,29 @@ class App extends Component {
                 fetch(`https://itunes.apple.com/search?term=${ARTIST_NAME}`).then((res) => {
                     return res.json();
                 }).then((data) => {
-                    data.results.map((single) => {
-                        if (single.artistName.toUpperCase().includes(ARTIST_NAME.toUpperCase())) {
-                            store.push(single);
-                            //console.log(store);
-
-                        }
+                    store = Array(0);
+                    if(data.results.length === 0){
                         storeResult =this.state.storeResult.slice();
                         storeResult = store;
                         this.setState({
                             storeResult : storeResult
                         });
-                        console.log(this.state.storeResult);
-                    });
+                    }
+                    data.results.forEach((single) => {
+                        if (single.artistName.toUpperCase().includes(ARTIST_NAME.toUpperCase())) {
+                            store.push(single);
+                        }
 
+                        storeResult =this.state.storeResult.slice();
+                        storeResult = store;
+                        this.setState({
+                            storeResult : storeResult
+                        });
+                    });
                 }).catch((error)=>{
                     console.log("Fetch error",error);
                 });
             }
-            else{
-
-            }
-
         });
     }
 
@@ -74,7 +75,7 @@ class App extends Component {
                   </Row>
                   <Row className="show-grid">
                       <Col xs={12} md={8}>
-                          <code> <SearchResult storeResult ={this.state.storeResult}/> </code>
+                          <code> <SearchResult storeResult ={this.state.storeResult} artistName={this.state.artistName}/> </code>
                       </Col>
                   </Row>
 
